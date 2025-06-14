@@ -20,49 +20,50 @@ import { Text } from 'src/ui/text';
 import { useOutsideClickClose } from 'src/ui/select/hooks/useOutsideClickClose';
 
 type ArticleParamsFormProps = {
-	appState: ArticleStateType;
-	setAppState: (state: ArticleStateType) => void;
+	articleState: ArticleStateType;
+	setArticleState: (state: ArticleStateType) => void;
 };
 
 export const ArticleParamsForm = ({
-	appState,
-	setAppState,
+	articleState,
+	setArticleState,
 }: ArticleParamsFormProps) => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setMenuIsOpen] = useState(false);
 	const [selectedState, setSelectedState] =
-		useState<ArticleStateType>(appState);
+		useState<ArticleStateType>(articleState);
 	const rootRef = useRef<HTMLDivElement>(null);
 
 	useOutsideClickClose({
-		isOpen,
+		isOpen: isMenuOpen,
 		rootRef,
 		onClose: () => {
-			setIsOpen(false);
+			if (!isMenuOpen) return;
+			setMenuIsOpen(false);
 		},
 		onChange: () => {},
 	});
 
 	const handleSubmit = () => {
-		setAppState(selectedState);
+		setArticleState(selectedState);
 	};
 
 	const handleReset = () => {
-		setAppState(defaultArticleState);
+		setArticleState(defaultArticleState);
 		setSelectedState(defaultArticleState);
 	};
 
 	return (
 		<>
 			<ArrowButton
-				isOpen={isOpen}
+				isOpen={isMenuOpen}
 				onClick={() => {
-					setIsOpen(!isOpen);
+					setMenuIsOpen(!isMenuOpen);
 				}}
 			/>
 			<aside
 				ref={rootRef}
 				className={`${styles.container} ${
-					isOpen ? styles.container_open : ''
+					isMenuOpen ? styles.container_open : ''
 				}`}>
 				<form
 					className={styles.form}
